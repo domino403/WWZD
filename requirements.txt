@@ -1,4 +1,6 @@
-kaggle
+# kaggle
 numpy
 torchvision
 pandas
+pyarrow
+scikit-learn
