@@ -1,5 +1,6 @@
 from read_parquet import read_parquet, PARQUET_FILE, save_data_batch
-import pandas as pd
+import fireducks.pandas as pd
+
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 import os
-import pandas as pd
+import fireducks.pandas as pd
 
 
 PARQUET_FILE = os.path.join(os.path.dirname(__file__), "DATA", "output_data.parquet")
