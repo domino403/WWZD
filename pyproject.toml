@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "find, process and visualize DATA"
 readme = "README.md"
 requires-python = ">=3.10"
+
 dependencies = [
     "uv",
     "numpy",
@@ -13,4 +14,9 @@ dependencies = [
     "scikit-learn",
     "black",
     "ruff",
+    "pre-commit>=4.0.1",
 ]
+
+[tool.uv]
+managed = true
+package = true
