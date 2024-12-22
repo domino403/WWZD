@@ -72,9 +72,15 @@ To convert the output JSON file to Parquet format, run:
 To load and transform the data, you can use the scripts in the `src` directory. For example, to load data using the `data_loader` class:
 
 ``` python
-from src.data_loader import data_loader
+from src.data_transformation.data_menager import data_menager
 
-loader = data_loader()
+data_loader = data_menager("data/output_data.parquet")
+data_loader.load_parquet()
+
+data_loader.prepare_data()
+
+print(data_loader.DataFrame)
+
 ```
 
 ### Checking Data Library Performance

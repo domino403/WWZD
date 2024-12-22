@@ -14,6 +14,7 @@ if __name__ == "__main__":
     data_loader.load_parquet()
     LOGGER.info("Data loading completed.")
     data_loader.prepare_data()
-    # print(f"{type(data_loader.DataFrame["ILSVRC2012_test_00000001.JPEG"])}")
+    LOGGER.info("Data preparation completed.")
+
     # print(data_loader.prepare_data().head(3))
     # LOGGER.info("Data loading completed.")
