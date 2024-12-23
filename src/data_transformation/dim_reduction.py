@@ -1,4 +1,5 @@
 from functools import wraps
+import os
 
 import polars as pl
 import numpy as np
@@ -7,9 +8,62 @@ from sklearn.manifold import TSNE
 from sklearn.preprocessing import StandardScaler
 
 from logging_config import setup_logger
+from src.data_transformation.data_menager import data_menager
 
 
 LOGGER = setup_logger()
+DIM_RED_DATA_DIR = os.path.abspath(
+    os.path.join(
+        os.path.dirname(os.path.realpath(__file__)), "..", "..", "data", "dim_reduction"
+    )
+)
+
+
+def data_dir_check():
+    if os.path.isdir("DIM_RED_DATA_DIR"):
+        LOGGER.info(
+            f"'{DIM_RED_DATA_DIR}' exists in your project. All dimension reduction results will be saved there"
+        )
+    else:
+        os.path.mkdir(DIM_RED_DATA_DIR)
+        LOGGER.warning(
+            f"Program didn't find '{DIM_RED_DATA_DIR}'. New directory will be created and reused in the future!"
+        )
+
+
+def save_load_logic(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs) -> pl.DataFrame:
+        data_dir_check()
+
+        file_name = func.__name__.split("_dim")[0]
+        file_name = file_name + "_" + "_".join(args[1:]) + ".parquet"
+        file_path = os.path.join(DIM_RED_DATA_DIR, file_name)
+
+        data_menager_dim = data_menager(file_path)
+
+        LOGGER.info("check if data file - '{file_name}' was already created.")
+        if os.path.isfile(file_path):
+            LOGGER.info(
+                "Found ready data file. Try to load it instead to procces new one!"
+            )
+            try:
+                data_menager_dim.load_parquet()
+                LOGGER.info("Returning historicall data!")
+
+                return data_menager_dim.DataFrame
+
+            except Exception as e:
+                LOGGER.warning(
+                    f"Found existing file '{file_name}' but while loading something went wrong: {e}"
+                )
+                LOGGER.warning("Program will try to create new data file!")
+
+        data_menager_dim.DataFrame = func(*args, **kwargs)
+
+        data_menager_dim.save_dataframe_to_file(file_path)
+
+        return data_menager_dim.DataFrame
 
 
 def polar_to_numpy(func):
@@ -54,6 +108,7 @@ def normalize_data(data: np.ndarray) -> np.ndarray:
     return scaler.fit_transform(data)
 
 
+# @save_load_logic
 @polar_to_numpy
 def pca_dim_reduction(
     data: np.ndarray, n_components: int, normalize: bool = False
@@ -84,6 +139,7 @@ def pca_dim_reduction(
     return data_pca
 
 
+# @save_load_logic
 @polar_to_numpy
 def t_sne_dim_reduction(
     data: np.ndarray,
@@ -127,6 +183,7 @@ def t_sne_dim_reduction(
     return data_t_sne
 
 
+# @save_load_logic
 @polar_to_numpy
 def truncated_svd_dim_reduction(
     data: np.ndarray,

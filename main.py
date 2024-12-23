@@ -9,7 +9,9 @@ LOGGER = setup_logger()
 
 
 if __name__ == "__main__":
+    LOGGER.info("===================================")
     LOGGER.info("Starting main.py!")
+    LOGGER.info("===================================")
     LOGGER.info(f"Current working directory: '{os.getcwd()}'")
     data_loader = data_menager("data/output_data.parquet")
     data_loader.load_parquet()
