@@ -56,6 +56,17 @@ You can also use standalone installer:
     ```
     pre-commit install
     ```
+## How to run project
+Main function can be called by main.py with command:
+```
+uv run main.py
+```
+In case if you want run some other script use:
+```
+uv run src/path/to/script.py
+```
+
+Logs will be stored in file `WWZD.logs` in main directory.
 
 ## Used data
 
@@ -66,11 +77,11 @@ You can also use standalone installer:
 
 To prepare the dataset using the EfficientNet model, run the following script:
 
-    python data/prepare_data.py
+    uv run data/prepare_data.py
 
 To convert the output JSON file to Parquet format, run:
 
-    python data/save_json_as_parquet.py
+    uv run data/save_json_as_parquet.py
 
 
 To load and transform the data, you can use the scripts in the `src` directory. For example, to load data using the `data_loader` class:
