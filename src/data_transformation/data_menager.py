@@ -10,7 +10,21 @@ LOGGER = setup_logger()
 
 
 class data_menager:
+    """
+    Class to manage data loading and preparation.
+
+    Attributes:
+        data_path (str): Path to the data file.
+        DataFrame (pl.DataFrame): Loaded and prepared data.
+    """
+
     def __init__(self, data_path: str):
+        """
+        Initialize the DataManager with the path to the data file.
+
+        Args:
+            data_path (str): Path to the data file.
+        """
         LOGGER.info(f"Data menager initialized, input path: '{data_path}'")
 
         self.data_path = os.path.abspath(data_path)
@@ -18,7 +32,10 @@ class data_menager:
 
     def load_parquet(self):
         """
-        Reads a Parquet file using the Polars library and measures the time taken.
+        Load data from a parquet file into a Polars DataFrame.
+
+        Raises:
+            Exception: If there is an error while loading the parquet file.
         """
         LOGGER.info(f"Checking if '{self.data_path}' exists")
         if not os.path.exists(self.data_path):
@@ -37,6 +54,12 @@ class data_menager:
             LOGGER.error(f"Error while loading parquet file: {e}", exc_info=True)
 
     def prepare_data(self):
+        """
+        Prepare the loaded data by transposing, renaming columns, and extracting image parameters.
+
+        Raises:
+            ValueError: If no data is loaded yet.
+        """
         if self.DataFrame is None:
             LOGGER.error("No data loaded yet.")
             raise ValueError("No data loaded yet.")

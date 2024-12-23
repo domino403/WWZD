@@ -52,6 +52,10 @@ You can also use standalone installer:
     ```
      you can use uv sync to manually update the environment
 
+4. Install pre-commit
+    ```
+    pre-commit install
+    ```
 
 ## Used data
 
