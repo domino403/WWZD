@@ -9,7 +9,7 @@ from logging_config import setup_logger
 LOGGER = setup_logger()
 
 
-class data_menager:
+class data_manager:
     """
     Class to manage data loading and preparation.
 
@@ -25,7 +25,7 @@ class data_menager:
         Args:
             data_path (str): Path to the data file.
         """
-        LOGGER.info(f"Data menager initialized, input path: '{data_path}'")
+        LOGGER.info(f"Data manager initialized, input path: '{data_path}'")
 
         self.data_path = os.path.abspath(data_path)
         self.DataFrame = None

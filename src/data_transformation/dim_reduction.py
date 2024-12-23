@@ -8,7 +8,7 @@ from sklearn.manifold import TSNE
 from sklearn.preprocessing import StandardScaler
 
 from logging_config import setup_logger
-from src.data_transformation.data_menager import data_menager
+from src.data_transformation.data_manager import data_manager
 
 
 LOGGER = setup_logger()
@@ -40,7 +40,7 @@ def save_load_logic(func):
         file_name = file_name + "_" + "_".join(args[1:]) + ".parquet"
         file_path = os.path.join(DIM_RED_DATA_DIR, file_name)
 
-        data_menager_dim = data_menager(file_path)
+        data_manager_dim = data_manager(file_path)
 
         LOGGER.info("check if data file - '{file_name}' was already created.")
         if os.path.isfile(file_path):
@@ -48,10 +48,10 @@ def save_load_logic(func):
                 "Found ready data file. Try to load it instead to procces new one!"
             )
             try:
-                data_menager_dim.load_parquet()
+                data_manager_dim.load_parquet()
                 LOGGER.info("Returning historicall data!")
 
-                return data_menager_dim.DataFrame
+                return data_manager_dim.DataFrame
 
             except Exception as e:
                 LOGGER.warning(
@@ -59,11 +59,11 @@ def save_load_logic(func):
                 )
                 LOGGER.warning("Program will try to create new data file!")
 
-        data_menager_dim.DataFrame = func(*args, **kwargs)
+        data_manager_dim.DataFrame = func(*args, **kwargs)
 
-        data_menager_dim.save_dataframe_to_file(file_path)
+        data_manager_dim.save_dataframe_to_file(file_path)
 
-        return data_menager_dim.DataFrame
+        return data_manager_dim.DataFrame
 
 
 def polar_to_numpy(func):

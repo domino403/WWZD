@@ -1,7 +1,7 @@
 import os
 
 from logging_config import setup_logger
-from src.data_transformation.data_menager import data_menager
+from src.data_transformation.data_manager import data_manager
 from src.data_transformation.dim_reduction import pca_dim_reduction
 
 
@@ -13,7 +13,7 @@ if __name__ == "__main__":
     LOGGER.info("Starting main.py!")
     LOGGER.info("===================================")
     LOGGER.info(f"Current working directory: '{os.getcwd()}'")
-    data_loader = data_menager("data/output_data.parquet")
+    data_loader = data_manager("data/output_data.parquet")
     data_loader.load_parquet()
     LOGGER.info("Data loading completed.")
     data_loader.prepare_data()
