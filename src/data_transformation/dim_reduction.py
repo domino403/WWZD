@@ -20,12 +20,12 @@ DIM_RED_DATA_DIR = os.path.abspath(
 
 
 def data_dir_check():
-    if os.path.isdir("DIM_RED_DATA_DIR"):
+    if os.path.exists(DIM_RED_DATA_DIR):
         LOGGER.info(
             f"'{DIM_RED_DATA_DIR}' exists in your project. All dimension reduction results will be saved there"
         )
     else:
-        os.path.mkdir(DIM_RED_DATA_DIR)
+        os.mkdir(DIM_RED_DATA_DIR)
         LOGGER.warning(
             f"Program didn't find '{DIM_RED_DATA_DIR}'. New directory will be created and reused in the future!"
         )
@@ -35,14 +35,22 @@ def save_load_logic(func):
     @wraps(func)
     def wrapper(*args, **kwargs) -> pl.DataFrame:
         data_dir_check()
+        print(len(args))
+        print(args[1])
 
         file_name = func.__name__.split("_dim")[0]
-        file_name = file_name + "_" + "_".join(args[1:]) + ".parquet"
+        if len(args) > 2:
+            file_name = file_name + "_" + "_".join(args[1:]) + ".parquet"
+        elif len(args) == 2:
+            file_name = file_name + "_" + str(args[1]) + ".parquet"
+        else:
+            file_name = file_name + ".parquet"
+
         file_path = os.path.join(DIM_RED_DATA_DIR, file_name)
 
         data_manager_dim = data_manager(file_path)
 
-        LOGGER.info("check if data file - '{file_name}' was already created.")
+        LOGGER.info(f"check if data file - '{file_name}' was already created.")
         if os.path.isfile(file_path):
             LOGGER.info(
                 "Found ready data file. Try to load it instead to procces new one!"
@@ -62,8 +70,10 @@ def save_load_logic(func):
         data_manager_dim.DataFrame = func(*args, **kwargs)
 
         data_manager_dim.save_dataframe_to_file(file_path)
-
+        LOGGER.info(f"Data saved to '{file_path}'")
         return data_manager_dim.DataFrame
+
+    return wrapper
 
 
 def polar_to_numpy(func):
@@ -108,7 +118,7 @@ def normalize_data(data: np.ndarray) -> np.ndarray:
     return scaler.fit_transform(data)
 
 
-# @save_load_logic
+@save_load_logic
 @polar_to_numpy
 def pca_dim_reduction(
     data: np.ndarray, n_components: int, normalize: bool = False
@@ -139,7 +149,7 @@ def pca_dim_reduction(
     return data_pca
 
 
-# @save_load_logic
+@save_load_logic
 @polar_to_numpy
 def t_sne_dim_reduction(
     data: np.ndarray,
@@ -183,7 +193,7 @@ def t_sne_dim_reduction(
     return data_t_sne
 
 
-# @save_load_logic
+@save_load_logic
 @polar_to_numpy
 def truncated_svd_dim_reduction(
     data: np.ndarray,

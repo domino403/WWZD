@@ -94,9 +94,9 @@ class data_manager:
             f"Data preparation completed. Final shape: {self.DataFrame.shape}, Time taken:  {time.time() - start_time}"
         )
 
-        def save_dataframe_to_file(self, file_path: str = None):
-            if file_path is None:
-                file_path = self.data_path
+    def save_dataframe_to_file(self, file_path: str = None):
+        if file_path is None:
+            file_path = self.data_path
 
-            self.DataFrame.write_parquet(file=file_path)
-            LOGGER.info("Saved DataFrame in to: '{file_path}'.")
+        self.DataFrame.write_parquet(file=file_path)
+        LOGGER.info("Saved DataFrame in to: '{file_path}'.")
