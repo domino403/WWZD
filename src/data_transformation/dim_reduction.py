@@ -20,6 +20,14 @@ DIM_RED_DATA_DIR = os.path.abspath(
 
 
 def data_dir_check():
+    """
+    Check if the directory for dimension reduction data exists.
+    If it does not exist, create the directory.
+
+    Logs:
+        - Info: If the directory exists.
+        - Warning: If the directory does not exist and is created.
+    """
     if os.path.exists(DIM_RED_DATA_DIR):
         LOGGER.info(
             f"'{DIM_RED_DATA_DIR}' exists in your project. All dimension reduction results will be saved there"
@@ -32,6 +40,16 @@ def data_dir_check():
 
 
 def save_load_logic(func):
+    """
+    Decorator to handle saving and loading of dimension reduction results.
+
+    Args:
+        func (function): The function to be decorated.
+
+    Returns:
+        function: The wrapped function that saves and loads results from a file.
+    """
+
     @wraps(func)
     def wrapper(*args, **kwargs) -> pl.DataFrame:
         data_dir_check()

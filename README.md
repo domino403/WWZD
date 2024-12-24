@@ -98,6 +98,16 @@ print(data_loader.DataFrame)
 
 ```
 
+To get data dim reduction done use one of this function:
+- pca_dim_reduction
+- t_sne_dim_reduction
+- truncated_svd_dim_reduction
+
+``` python
+data = pca_dim_reduction(polars_DataFrame, n_components=30)
+```
+While runing each function for the first time, the output will be saved to the file. Each new run with the same setings will result with loading data from the file in place of processing them again. This was implemented for time saving.
+
 ### Checking Data Library Performance
 
 To check the performance of different data processing libraries, run:
