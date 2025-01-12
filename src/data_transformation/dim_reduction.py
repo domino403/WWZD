@@ -53,9 +53,6 @@ def save_load_logic(func):
     @wraps(func)
     def wrapper(*args, **kwargs) -> pl.DataFrame:
         data_dir_check()
-        print(len(args))
-        print(args[1])
-
         file_name = func.__name__.split("_dim")[0]
         if len(args) > 2:
             file_name = file_name + "_" + "_".join(args[1:]) + ".parquet"

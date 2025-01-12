@@ -164,6 +164,7 @@ cython_debug/
 
 # raw images files (dir to big)
 raw_images/
+vis_images/
 
 # UV
 uv.lock

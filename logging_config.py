@@ -12,12 +12,12 @@ def setup_logger():
 
     # create console handler and set level to debug
     console_channel = logging.StreamHandler()
-    console_channel.setLevel(logging.WARNING)
+    console_channel.setLevel(logging.DEBUG)
 
     file_handler = RotatingFileHandler(
         "WWZD.log", mode="a", maxBytes=5 * 1024 * 1024, backupCount=3
     )
-    file_handler.setLevel(logging.INFO)
+    file_handler.setLevel(logging.DEBUG)
 
     # create formatter
     formatter = logging.Formatter(

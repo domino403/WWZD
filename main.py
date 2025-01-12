@@ -1,8 +1,9 @@
 import os
 
 from logging_config import setup_logger
+
 from src.data_transformation.data_manager import data_manager
-from src.data_transformation.dim_reduction import pca_dim_reduction
+from src.visualisation.plotly_raport import VisualizationApp
 
 
 LOGGER = setup_logger()
@@ -19,10 +20,21 @@ if __name__ == "__main__":
     data_loader.prepare_data()
     LOGGER.info("Data preparation completed.")
 
-    test = pca_dim_reduction(data_loader.DataFrame.head(50), 30)
-    print(test)
+    # pca_100_3 = pca_dim_reduction(data_loader.DataFrame.head(100), 3)
 
+    viz_app = VisualizationApp(
+        data=data_loader.DataFrame,
+        x_col="column_0",
+        y_col="column_1",
+        z_col="column_2",
+        id_col="image_ID",
+        images_dir=os.path.abspath("data/vis_images/"),
+    )
+    viz_app.app.run_server()
+    # print(pca_100_3)
+
+    # visualize_scatter_3d(pca_100_3, "column_0", "column_1", "column_2", id_col='image_ID')
+    # visualise_with_images(pca_100_3, "column_0", "column_1", "column_2", id_col='image_ID', images_dir='data/vis_images/')
     # TODO: Implement dimensionality reduction
-    # - saving/loading system for dimensional reducted data. Run the dimensionality reduction only if the data is not already saved.
 
     # TODO: data visualisation
