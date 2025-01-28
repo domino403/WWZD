@@ -1,3 +1,7 @@
+"""
+Resize ALL IMAGES to 150x150 pixels and save them in a new folder.
+"""
+
 import os
 import json
 from PIL import Image, ImageOps

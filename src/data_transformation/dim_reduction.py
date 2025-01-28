@@ -127,8 +127,8 @@ def polar_to_numpy(func):
     return wrapper
 
 
-def normalize_data(data: np.ndarray) -> np.ndarray:
-    LOGGER.info("Normalizing data")
+def standardization_data(data: np.ndarray) -> np.ndarray:
+    LOGGER.info("data standardization")
     scaler = StandardScaler()
     return scaler.fit_transform(data)
 
@@ -136,7 +136,7 @@ def normalize_data(data: np.ndarray) -> np.ndarray:
 @save_load_logic
 @polar_to_numpy
 def pca_dim_reduction(
-    data: np.ndarray, n_components: int, normalize: bool = False
+    data: np.ndarray, n_components: int, standardization: bool = True
 ) -> np.ndarray:
     """
     Perform PCA dimensionality reduction on the input data.
@@ -144,7 +144,7 @@ def pca_dim_reduction(
     Parameters:
     - data: np.ndarray - Input data.
     - n_components: int - Number of components to keep.
-    - normalize: bool - Whether to normalize the data before PCA.
+    - standardization: bool - Whether to standardization the data before PCA.
 
     Returns:
     - np.ndarray - Data after PCA dimensionality reduction.
@@ -154,8 +154,8 @@ def pca_dim_reduction(
 
     pca = PCA(n_components=n_components)
 
-    if normalize:
-        data = normalize_data(data)
+    if standardization:
+        data = standardization_data(data)
 
     data_pca = pca.fit_transform(data)
 
@@ -169,9 +169,8 @@ def pca_dim_reduction(
 def t_sne_dim_reduction(
     data: np.ndarray,
     n_components: int,
-    normalize: bool = False,
+    standardization: bool = True,
     perplexity: float = 30.0,
-    learning_rate: float = 200.0,
     random_state: int = None,
 ) -> np.ndarray:
     """
@@ -180,7 +179,7 @@ def t_sne_dim_reduction(
     Parameters:
     - data: np.ndarray - Input data.
     - n_components: int - Number of components to keep.
-    - normalize: bool - Whether to normalize the data before t-SNE.
+    - standardization: bool - Whether to standardization the data before t-SNE.
     - perplexity: float - The perplexity parameter.
     - learning_rate: float - The learning rate parameter.
     - random_state: int - Random state for reproducibility.
@@ -194,12 +193,11 @@ def t_sne_dim_reduction(
     t_sne = TSNE(
         n_components=n_components,
         perplexity=perplexity,
-        learning_rate=learning_rate,
         random_state=random_state,
     )
 
-    if normalize:
-        data = normalize_data(data)
+    if standardization:
+        data = standardization_data(data)
 
     data_t_sne = t_sne.fit_transform(data)
 
@@ -213,7 +211,7 @@ def t_sne_dim_reduction(
 def truncated_svd_dim_reduction(
     data: np.ndarray,
     n_components: int,
-    normalize: bool = False,
+    standardization: bool = False,
     random_state: int = None,
     density_threshold: float = 0.0,
 ) -> np.ndarray:
@@ -223,7 +221,7 @@ def truncated_svd_dim_reduction(
     Parameters:
     - data: np.ndarray - Input data.
     - n_components: int - Number of components to keep.
-    - normalize: bool - Whether to normalize the data before Truncated SVD.
+    - standardization: bool - Whether to standardization the data before Truncated SVD.
     - random_state: int - Random state for reproducibility.
     - density_threshold: float - Set values to zero when this value smaller than density_threshold.
 
@@ -241,8 +239,8 @@ def truncated_svd_dim_reduction(
         )
         data[data < density_threshold] = 0.0
 
-    if normalize:
-        data = normalize_data(data)
+    if standardization:
+        data = standardization_data(data)
 
     data_svd = svd.fit_transform(data)
 

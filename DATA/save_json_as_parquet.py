@@ -1,4 +1,7 @@
 """
+Transform a JSON DATA file into a Parquet file.
+
+
 Please, do not ask 'why?'
 
 I don't want talk about it.
